@@ -45,7 +45,45 @@ with patch.object(ProductClass, 'method', return_value=None) as mock_method:
 mock_method.assert_called_once_with(1, 2, 3)
 
 
+foo = {'key': 'value'}
+original = foo.copy()
+with patch.dict(foo, {'newkey': 'newvalue'}, clear=True):
+  assert foo == {'newkey': 'newvalue'}
+assert foo == original
 
+mock = MagicMock()
+mock.__str__.return_value = 'foobarbaz'
+str(mock)
+mock.__str__.assert_called_with()
+
+
+mock = Mock()
+mock.__str__ = Mock(return_value='wheeeee')
+str(mock)
+
+from unittest.mock import create_autospec
+def function(a, b, c):
+  pass
+  
+mock_function = create_autospec(function, return_value='')
+mock_function(1, 2, 3)
+mock_function.assert_called_once_with(1, 2, 3)
+mock_function('wrong arguments')
+
+
+mock = Mock()
+mock.method()
+mock.method.assert_called()
+
+mock = Mock()
+mock.method()
+mock method.assert_called_once()
+mock.method()
+mock.method.assert_called_once()
+
+mock = Mock()
+mock.method(1, 2, 3, test='wow')
+mock.method.assert_called_with(1, 2, 3, test='wow')
 ```
 
 ```
